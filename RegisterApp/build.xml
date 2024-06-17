@@ -1,0 +1,46 @@
+<project name="registerApp" default="jar" basedir=".">
+    <!-- Definir propriedades -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="manifest.file" value="manifest.mf"/>
+    
+    <!-- Criação de diretórios -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+    
+   <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes">
+        <classpath refid="classpath"/>
+    </javac>
+</target>
+
+<target name="compile-tests" depends="compile">
+    <mkdir dir="build/test-classes"/>
+    <javac srcdir="test" destdir="build/test-classes">
+        <classpath refid="classpath"/>
+        <classpath path="build/classes"/>
+    </javac>
+</target>
+
+<target name="test" depends="compile-tests">
+    <junit printsummary="yes">
+        <classpath>
+            <pathelement path="build/classes"/>
+            <pathelement path="build/test-classes"/>
+            <pathelement path="path/to/junit.jar"/>
+            <pathelement path="path/to/mockito-core.jar"/>
+        </classpath>
+        <batchtest fork="yes" todir="test-reports">
+            <fileset dir="test">
+                <include name="**/*Test*.java"/>
+            </fileset>
+        </batchtest>
+    </junit>
+</target>
+
+</project>
